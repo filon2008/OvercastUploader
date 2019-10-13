@@ -8,4 +8,5 @@ filename=$(basename $1)
 key=$(grep -o -E '<input type="hidden" name="key" value=".*"/>' upload.tmp |sed 's/<input type="hidden" name="key" value="//g' |sed 's/"\/>//g'|sed "s/\${filename}/$filename/g")
 rm upload.tmp
 echo Uploading $1
-curl -L -F "bucket=uploads-overcast" -F "key=$key" -F "AWSAccessKeyId=$AWSAccessKeyId" -F "acl=authenticated-read" -F "success_action_redirect=https://overcast.fm/podcasts/upload_succeeded" -F "policy=$policy" -F "signature=$signature" -F "Content-Type=audio/mpeg" -F "file=@$1" -X POST -b overcast_cookies https://uploads-overcast.s3.amazonaws.com/ || exit 1
+curl -L -F "bucket=uploads-overcast" -F "key=$key" -F "AWSAccessKeyId=$AWSAccessKeyId" -F "acl=authenticated-read" -F "policy=$policy" -F "signature=$signature" -F "Content-Type=audio/mpeg" -F "file=@$1" -X POST -b overcast_cookies https://uploads-overcast.s3.amazonaws.com/ || exit 1
+curl -L -F "key=$key" -X POST -b overcast_cookies https://overcast.fm/podcasts/upload_succeeded/ || exit 1
