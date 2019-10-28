@@ -4,7 +4,7 @@ curl -L -b overcast_cookies -o upload.tmp https://overcast.fm/uploads || exit 1
 policy=$(grep -Po '<input type="hidden" id="upload_policy" name="policy" value="\K.+(?="/>)' upload.tmp)
 signature=$(grep -Po '<input type="hidden" id="upload_signature" name="signature" value="\K.+(?="/>)' upload.tmp)
 AWSAccessKeyId=$(grep -Po '<input type="hidden" name="AWSAccessKeyId" value="\K.+(?="/>)' upload.tmp)
-filename=$(basename $1)
+filename=$(basename "$1")
 key=$(grep -Po '<input type="hidden" name="key" value="\K.+(?="/>)' upload.tmp|sed "s/\${filename}/$filename/g")
 rm upload.tmp
 echo Uploading $1
